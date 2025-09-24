@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 public class ListaSimple<T> implements Iterable<T> {
     private Nodo<T> cabeza;
     private Nodo<T> cola;
-    private int tamaño;
+    private int size;
 
 
     /**
@@ -20,7 +20,7 @@ public class ListaSimple<T> implements Iterable<T> {
     public ListaSimple() {
         this.cabeza = null;
         this.cola = null;
-        this.tamaño = 0;
+        this.size = 0;
     }
 
     public int size() {
@@ -61,7 +61,7 @@ public class ListaSimple<T> implements Iterable<T> {
             cola = nuevoNodo;
         }
         
-        tamaño++;
+        size++;
     }
 
     /**
@@ -79,7 +79,7 @@ public class ListaSimple<T> implements Iterable<T> {
             cabeza = nuevoNodo;
         }
         
-        tamaño++;
+        size++;
     }
 
     /**
@@ -89,7 +89,7 @@ public class ListaSimple<T> implements Iterable<T> {
      * @throws IndexOutOfBoundsException si el índice está fuera de rango
      */
     public void agregarEn(T dato, int indice) {
-        if (indice < 0 || indice > tamaño) {
+        if (indice < 0 || indice > size) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
         
@@ -98,7 +98,7 @@ public class ListaSimple<T> implements Iterable<T> {
             return;
         }
         
-        if (indice == tamaño) {
+        if (indice == size) {
             agregar(dato);
             return;
         }
@@ -112,7 +112,7 @@ public class ListaSimple<T> implements Iterable<T> {
         nuevoNodo.setSiguiente(actual.getSiguiente());
         actual.setSiguiente(nuevoNodo);
         
-        tamaño++;
+        size++;
     }
 
     /**
@@ -132,7 +132,7 @@ public class ListaSimple<T> implements Iterable<T> {
             cola = null;
         }
         
-        tamaño--;
+        size--;
         return dato;
     }
 
@@ -159,7 +159,7 @@ public class ListaSimple<T> implements Iterable<T> {
         cola = actual;
         cola.setSiguiente(null);
         
-        tamaño--;
+        size--;
         return dato;
     }
 
@@ -170,7 +170,7 @@ public class ListaSimple<T> implements Iterable<T> {
      * @throws IndexOutOfBoundsException si el índice está fuera de rango
      */
     public T eliminarEn(int indice) {
-        if (indice < 0 || indice >= tamaño) {
+        if (indice < 0 || indice >= size) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
         
@@ -178,7 +178,7 @@ public class ListaSimple<T> implements Iterable<T> {
             return eliminarPrimero();
         }
         
-        if (indice == tamaño - 1) {
+        if (indice == size - 1) {
             return eliminarUltimo();
         }
         
@@ -190,7 +190,7 @@ public class ListaSimple<T> implements Iterable<T> {
         T dato = actual.getSiguiente().getDato();
         actual.setSiguiente(actual.getSiguiente().getSiguiente());
         
-        tamaño--;
+        size--;
         return dato;
     }
 
@@ -223,7 +223,7 @@ public class ListaSimple<T> implements Iterable<T> {
         }
         
         actual.setSiguiente(actual.getSiguiente().getSiguiente());
-        tamaño--;
+        size--;
         
         return true;
     }
@@ -235,7 +235,7 @@ public class ListaSimple<T> implements Iterable<T> {
      * @throws IndexOutOfBoundsException si el índice está fuera de rango
      */
     public T obtener(int indice) {
-        if (indice < 0 || indice >= tamaño) {
+        if (indice < 0 || indice >= size) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
         
@@ -297,7 +297,7 @@ public class ListaSimple<T> implements Iterable<T> {
      * @return Número de elementos en la lista
      */
     public int tamaño() {
-        return tamaño;
+        return size;
     }
 
     /**
@@ -306,7 +306,7 @@ public class ListaSimple<T> implements Iterable<T> {
     public void vaciar() {
         cabeza = null;
         cola = null;
-        tamaño = 0;
+        size = 0;
     }
 
     /**
