@@ -2,21 +2,18 @@ package co.uniquindio.listasimple;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 
-/**
- * Implementación de una lista enlazada genérica
- * @param <T> Tipo de dato que almacena la lista
+/*
+Lista simple genérica
  */
-public class ListaSimple<T> implements Iterable<T> {
+public class ListaSimple<T extends Comparable<T>> implements Iterable<T> {
+
     private Nodo<T> cabeza;
     private Nodo<T> cola;
     private int size;
 
 
-    /**
-     * Constructor de la lista enlazada
-     */
+    // Constructor
     public ListaSimple() {
         this.cabeza = null;
         this.cola = null;
@@ -46,11 +43,9 @@ public class ListaSimple<T> implements Iterable<T> {
         }
         throw new IndexOutOfBoundsException();
     }
-    /**
-     * Agrega un elemento al final de la lista
-     * @param dato Elemento a agregar
-     */
-    public void agregar(T dato) {
+
+    //Agregar elemento al final
+    public void agregarFinal(T dato) {
         Nodo<T> nuevoNodo = new Nodo<>(dato);
         
         if (estaVacia()) {
@@ -64,11 +59,8 @@ public class ListaSimple<T> implements Iterable<T> {
         size++;
     }
 
-    /**
-     * Agrega un elemento al inicio de la lista
-     * @param dato Elemento a agregar
-     */
-    public void agregarAlInicio(T dato) {
+    //Agregar elemento al inicio
+    public void agregarInicio(T dato) {
         Nodo<T> nuevoNodo = new Nodo<>(dato);
         
         if (estaVacia()) {
@@ -82,24 +74,19 @@ public class ListaSimple<T> implements Iterable<T> {
         size++;
     }
 
-    /**
-     * Agrega un elemento en una posición específica
-     * @param dato Elemento a agregar
-     * @param indice Posición donde agregar el elemento
-     * @throws IndexOutOfBoundsException si el índice está fuera de rango
-     */
+    //Agregar en posicion específica
     public void agregarEn(T dato, int indice) {
         if (indice < 0 || indice > size) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
         
         if (indice == 0) {
-            agregarAlInicio(dato);
+            agregarInicio(dato);
             return;
         }
         
         if (indice == size) {
-            agregar(dato);
+            agregarFinal(dato);
             return;
         }
         
@@ -115,11 +102,8 @@ public class ListaSimple<T> implements Iterable<T> {
         size++;
     }
 
-    /**
-     * Elimina el primer elemento de la lista
-     * @return El elemento eliminado
-     * @throws NoSuchElementException si la lista está vacía
-     */
+    // Elimina el primer elemento de la lista
+
     public T eliminarPrimero() {
         if (estaVacia()) {
             throw new NoSuchElementException("La lista está vacía");
@@ -136,11 +120,8 @@ public class ListaSimple<T> implements Iterable<T> {
         return dato;
     }
 
-    /**
-     * Elimina el último elemento de la lista
-     * @return El elemento eliminado
-     * @throws NoSuchElementException si la lista está vacía
-     */
+    // Elimina el último elemento de la lista
+
     public T eliminarUltimo() {
         if (estaVacia()) {
             throw new NoSuchElementException("La lista está vacía");
@@ -163,12 +144,8 @@ public class ListaSimple<T> implements Iterable<T> {
         return dato;
     }
 
-    /**
-     * Elimina un elemento en una posición específica
-     * @param indice Posición del elemento a eliminar
-     * @return El elemento eliminado
-     * @throws IndexOutOfBoundsException si el índice está fuera de rango
-     */
+    // Elimina un elemento en una posición específica
+
     public T eliminarEn(int indice) {
         if (indice < 0 || indice >= size) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
@@ -194,51 +171,18 @@ public class ListaSimple<T> implements Iterable<T> {
         return dato;
     }
 
-    /**
-     * Elimina la primera ocurrencia de un elemento
-     * @param dato Elemento a eliminar
-     * @return true si se eliminó el elemento, false si no se encontró
-     */
-    public boolean eliminar(T dato) {
-        if (estaVacia()) {
-            return false;
-        }
-        
-        if (cabeza.getDato().equals(dato)) {
-            eliminarPrimero();
-            return true;
-        }
-        
-        Nodo<T> actual = cabeza;
-        while (actual.getSiguiente() != null && !actual.getSiguiente().getDato().equals(dato)) {
-            actual = actual.getSiguiente();
-        }
-        
-        if (actual.getSiguiente() == null) {
-            return false;
-        }
-        
-        if (actual.getSiguiente() == cola) {
-            cola = actual;
-        }
-        
-        actual.setSiguiente(actual.getSiguiente().getSiguiente());
-        size--;
-        
-        return true;
-    }
 
-    /**
-     * Obtiene el elemento en una posición específica
-     * @param indice Posición del elemento
-     * @return El elemento en la posición especificada
-     * @throws IndexOutOfBoundsException si el índice está fuera de rango
-     */
-    public T obtener(int indice) {
+    //obtener el valor de un nodo
+    public T obtenerValorNodo(int indice) {
+        /*
         if (indice < 0 || indice >= size) {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
         }
-        
+
+         */
+        if(indiceValido(indice)) {
+            throw new IndexOutOfBoundsException("Índice fuera de rango: " + indice);
+        }
         Nodo<T> actual = cabeza;
         for (int i = 0; i < indice; i++) {
             actual = actual.getSiguiente();
@@ -247,91 +191,114 @@ public class ListaSimple<T> implements Iterable<T> {
         return actual.getDato();
     }
 
-    /**
-     * Busca un elemento en la lista
-     * @param dato Elemento a buscar
-     * @return true si el elemento está en la lista, false en caso contrario
-     */
-    public boolean contiene(T dato) {
+    //Obtener un nodo:
+    public Nodo<T> obtenerNodo(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Índice fuera de rango");
+        }
+
         Nodo<T> actual = cabeza;
-        
+        for (int i = 0; i < index; i++) {
+            actual = actual.getSiguiente();
+        }
+        return actual;
+    }
+
+    //Obtener posicion del nodo:
+    public int obtenerPosicionNodo(T dato) {
+        Nodo<T> actual = cabeza;
+        int posicion = 0;
+
         while (actual != null) {
             if (actual.getDato().equals(dato)) {
-                return true;
+                return posicion;
             }
             actual = actual.getSiguiente();
+            posicion++;
         }
-        
-        return false;
+
+        // No se encontró el nodo
+        return -1;
     }
 
-    /**
-     * Busca elementos que cumplan con un criterio
-     * @param criterio Predicado que define el criterio de búsqueda
-     * @return Una nueva lista con los elementos que cumplen el criterio
-     */
-    public ListaSimple<T> buscar(Predicate<T> criterio) {
-        ListaSimple<T> resultado = new ListaSimple<>();
+    public boolean indiceValido(int indice) {
+        boolean valido = true;
+        if (indice < 0 || indice >= size) {
+            valido = false;
+        }
+        return valido;
+    }
+
+
+
+    public void modificarNodo(int posicion, T nuevoDato) {
+        if (posicion < 0 || posicion >= size) {
+            throw new IndexOutOfBoundsException("Índice fuera de rango");
+        }
+
         Nodo<T> actual = cabeza;
-        
-        while (actual != null) {
-            if (criterio.test(actual.getDato())) {
-                resultado.agregar(actual.getDato());
-            }
+        for (int i = 0; i < posicion; i++) {
             actual = actual.getSiguiente();
         }
-        
-        return resultado;
+
+        actual.setDato(nuevoDato);
     }
 
-    /**
-     * Verifica si la lista está vacía
-     * @return true si la lista está vacía, false en caso contrario
-     */
+
+   //Verificar si la lista está vacia
     public boolean estaVacia() {
         return cabeza == null;
     }
 
-    /**
-     * Obtiene el tamaño de la lista
-     * @return Número de elementos en la lista
-     */
-    public int tamaño() {
+    //tamaño lista
+    public int tamanio() {
         return size;
     }
 
-    /**
-     * Vacía la lista
-     */
-    public void vaciar() {
+    //Vaciar lista
+    public void borrarLista() {
         cabeza = null;
         cola = null;
         size = 0;
     }
 
-    /**
-     * Obtiene el primer elemento de la lista
-     * @return El primer elemento
-     * @throws NoSuchElementException si la lista está vacía
-     */
-    public T primero() {
-        if (estaVacia()) {
-            throw new NoSuchElementException("La lista está vacía");
+
+    public void ordenarLista() {
+        if (cabeza == null || cabeza.getSiguiente() == null) {
+            return;
         }
-        return cabeza.getDato();
+
+        boolean cambiado;
+        do {
+            cambiado = false;
+            Nodo<T> actual = cabeza;
+
+            while (actual.getSiguiente() != null) {
+                Nodo<T> siguiente = actual.getSiguiente();
+
+                if (actual.getDato().compareTo(siguiente.getDato()) > 0) {
+                    // Intercambio de datos
+                    T temp = actual.getDato();
+                    actual.setDato(siguiente.getDato());
+                    siguiente.setDato(temp);
+
+                    cambiado = true;
+                }
+
+                actual = actual.getSiguiente();
+            }
+        } while (cambiado);
     }
 
-    /**
-     * Obtiene el último elemento de la lista
-     * @return El último elemento
-     * @throws NoSuchElementException si la lista está vacía
-     */
-    public T ultimo() {
-        if (estaVacia()) {
-            throw new NoSuchElementException("La lista está vacía");
+    public void imprimirLista() {
+        Nodo<T> actual = cabeza;
+        while (actual != null) {
+            System.out.print(actual.getDato() + " -> ");
+            actual = actual.getSiguiente();
         }
-        return cola.getDato();
+        System.out.println("null");
     }
+
 
     @Override
     public Iterator<T> iterator() {
